@@ -44,12 +44,10 @@
         validate: 'visudo -cf %s'
 
     - name: Configure SSH for new user
-      copy:
-        src: "/home/tpellatt/.ssh/id_rsa.pub"
-        dest: "/home/tpellatt/.ssh/authorized_keys"
-        owner: "tpellatt"
-        group: "tpellatt"
-        mode: '0600'
+      authorized_key:
+        user: "tpellatt"
+        state: present
+        key: "{{ lookup('file', '/home/tpellatt/.ssh/id_rsa.pub') }}"
 
     - name: Create directory structure for labs
       file:
@@ -57,4 +55,4 @@
         state: directory
         owner: "tpellatt"
         group: "tpellatt"
-      loop: "{{ range(1, 8) | list }}"
+      loop: "{{ range(1, 9) | list }}"
